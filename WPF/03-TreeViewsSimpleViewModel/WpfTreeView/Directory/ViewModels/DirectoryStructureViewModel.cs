@@ -13,7 +13,7 @@ namespace WpfTreeView
         /// <summary>
         /// A list of all directories on the machine
         /// </summary>
-        public ObservableCollection<DirectoryItemViewModel> Items { get; set; }
+        public ObservableCollection<DirectoryItemViewModel> pub_Items { get; set; }
 
         #endregion
 
@@ -28,7 +28,7 @@ namespace WpfTreeView
             var children = DirectoryStructure.GetLogicalDrives();
 
             // Create the view models from the data
-            Items = new ObservableCollection<DirectoryItemViewModel>(
+            pub_Items = new ObservableCollection<DirectoryItemViewModel>(
                 children.Select(drive => new DirectoryItemViewModel(drive.FullPath, DirectoryItemType.Drive)));
         }
 

@@ -10,40 +10,33 @@ namespace WpfTreeView
     public class DirectoryItemViewModel : BaseViewModel
     {
         #region Public Properties
-
         /// <summary>
         /// The type of this item
         /// </summary>
-        public DirectoryItemType Type { get; set; }
-
-        public string ImageName => Type == DirectoryItemType.Drive ? "drive" : Type == DirectoryItemType.File ? "file" : IsExpanded ? "folder-open" : "folder-closed";
-
+        public DirectoryItemType pub_Type { get; set; }
+        public string pub_ImageName => pub_Type == DirectoryItemType.Drive ? "drive" : pub_Type == DirectoryItemType.File ? "file" : pub_IsExpanded ? "folder-open" : "folder-closed";
         /// <summary>
         /// The full path to the item
         /// </summary>
-        public string FullPath { get; set; }
-
+        public string pub_FullPath { get; set; }
         /// <summary>
         /// The name of this directory item
         /// </summary>
-        public string Name => Type == DirectoryItemType.Drive ? FullPath : DirectoryStructure.GetFileFolderName(FullPath);
-
+        public string pub_Name => pub_Type == DirectoryItemType.Drive ? pub_FullPath : DirectoryStructure.GetFileFolderName(pub_FullPath);
         /// <summary>
         /// A list of all children contained inside this item
         /// </summary>
-        public ObservableCollection<DirectoryItemViewModel> Children { get; set; }
-
+        public ObservableCollection<DirectoryItemViewModel> pub_Children { get; set; }
         /// <summary>
         /// Indicates if this item can be expanded
         /// </summary>
-        public bool CanExpand => Type != DirectoryItemType.File;
-
+        public bool pub_CanExpand => pub_Type != DirectoryItemType.File;
         /// <summary>
         /// Indicates if the current item is expanded or not
         /// </summary>
-        public bool IsExpanded
+        public bool pub_IsExpanded
         {
-            get => Children?.Count(f => f != null) > 0;
+            get => pub_Children?.Count(f => f != null) > 0;
             set
             {
                 // If the UI tells us to expand...
@@ -55,11 +48,9 @@ namespace WpfTreeView
                     ClearChildren();
             }
         }
-
         #endregion
 
         #region Public Commands
-
         /// <summary>
         /// The command to expand this item
         /// </summary>
@@ -72,16 +63,16 @@ namespace WpfTreeView
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="fullPath">The full path of this item</param>
-        /// <param name="type">The type of item</param>
-        public DirectoryItemViewModel(string fullPath, DirectoryItemType type)
+        /// <param name="pubFullPath">The full path of this item</param>
+        /// <param name="pubType">The type of item</param>
+        public DirectoryItemViewModel(string pubFullPath, DirectoryItemType pubType)
         {
             // Create commands
             ExpandCommand = new RelayCommand(Expand);
 
             // Set path and type
-            FullPath = fullPath;
-            Type = type;
+            pub_FullPath = pubFullPath;
+            pub_Type = pubType;
 
             // Setup the children as needed
             ClearChildren();
@@ -97,11 +88,11 @@ namespace WpfTreeView
         private void ClearChildren()
         {
             // Clear items
-            Children = new ObservableCollection<DirectoryItemViewModel>();
+            pub_Children = new ObservableCollection<DirectoryItemViewModel>();
 
             // Show the expand arrow if we are not a file
-            if (Type != DirectoryItemType.File)
-                Children.Add(null);
+            if (pub_Type != DirectoryItemType.File)
+                pub_Children.Add(null);
         }
 
         #endregion
@@ -112,12 +103,12 @@ namespace WpfTreeView
         private void Expand()
         {
             // We cannot expand a file
-            if (Type == DirectoryItemType.File)
+            if (pub_Type == DirectoryItemType.File)
                 return;
 
             // Find all children
-            var children = DirectoryStructure.GetDirectoryContents(FullPath);
-            Children = new ObservableCollection<DirectoryItemViewModel>(
+            var children = DirectoryStructure.GetDirectoryContents(pub_FullPath);
+            pub_Children = new ObservableCollection<DirectoryItemViewModel>(
                                 children.Select(content => new DirectoryItemViewModel(content.FullPath, content.Type)));
         }
     }
