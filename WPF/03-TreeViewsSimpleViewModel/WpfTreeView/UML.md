@@ -78,5 +78,5 @@ DirectoryItemViewModel --> DirectoryItemType
 %% 依赖（虚线）
 DirectoryItemViewModel ..> DirectoryStructure : uses
 DirectoryItem ..> DirectoryStructure : Name helper
-HeaderToImageConverter ..> DirectoryItemType : uses ImageName
-
+DirectoryStructure ..> DirectoryItem : creates/returns
+HeaderToImageConverter ..> DirectoryItemViewModel : uses ImageName
