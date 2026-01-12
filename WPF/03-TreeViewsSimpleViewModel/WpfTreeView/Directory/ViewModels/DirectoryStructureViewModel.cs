@@ -28,7 +28,7 @@ namespace WpfTreeView
             var children = DirectoryStructure.GetLogicalDrives();
 
             // Create the view models from the data
-            this.Items = new ObservableCollection<DirectoryItemViewModel>(
+            Items = new ObservableCollection<DirectoryItemViewModel>(
                 children.Select(drive => new DirectoryItemViewModel(drive.FullPath, DirectoryItemType.Drive)));
         }
 

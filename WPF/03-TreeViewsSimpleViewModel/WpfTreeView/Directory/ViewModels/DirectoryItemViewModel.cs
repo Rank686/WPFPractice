@@ -16,7 +16,7 @@ namespace WpfTreeView
         /// </summary>
         public DirectoryItemType Type { get; set; }
 
-        public string ImageName => Type == DirectoryItemType.Drive ? "drive" : (Type == DirectoryItemType.File ? "file" : (IsExpanded ? "folder-open" : "folder-closed"));
+        public string ImageName => Type == DirectoryItemType.Drive ? "drive" : Type == DirectoryItemType.File ? "file" : IsExpanded ? "folder-open" : "folder-closed";
 
         /// <summary>
         /// The full path to the item
@@ -26,7 +26,7 @@ namespace WpfTreeView
         /// <summary>
         /// The name of this directory item
         /// </summary>
-        public string Name { get { return this.Type == DirectoryItemType.Drive ? this.FullPath : DirectoryStructure.GetFileFolderName(this.FullPath); } }
+        public string Name => Type == DirectoryItemType.Drive ? FullPath : DirectoryStructure.GetFileFolderName(FullPath);
 
         /// <summary>
         /// A list of all children contained inside this item
@@ -36,17 +36,14 @@ namespace WpfTreeView
         /// <summary>
         /// Indicates if this item can be expanded
         /// </summary>
-        public bool CanExpand { get { return this.Type != DirectoryItemType.File; } }
+        public bool CanExpand => Type != DirectoryItemType.File;
 
         /// <summary>
         /// Indicates if the current item is expanded or not
         /// </summary>
         public bool IsExpanded
         {
-            get
-            {
-                return this.Children?.Count(f => f != null) > 0;
-            }
+            get => Children?.Count(f => f != null) > 0;
             set
             {
                 // If the UI tells us to expand...
@@ -55,7 +52,7 @@ namespace WpfTreeView
                     Expand();
                 // If the UI tells us to close
                 else
-                    this.ClearChildren();
+                    ClearChildren();
             }
         }
 
@@ -80,14 +77,14 @@ namespace WpfTreeView
         public DirectoryItemViewModel(string fullPath, DirectoryItemType type)
         {
             // Create commands
-            this.ExpandCommand = new RelayCommand(Expand);
+            ExpandCommand = new RelayCommand(Expand);
 
             // Set path and type
-            this.FullPath = fullPath;
-            this.Type = type;
+            FullPath = fullPath;
+            Type = type;
 
             // Setup the children as needed
-            this.ClearChildren();
+            ClearChildren();
         }
 
         #endregion
@@ -100,11 +97,11 @@ namespace WpfTreeView
         private void ClearChildren()
         {
             // Clear items
-            this.Children = new ObservableCollection<DirectoryItemViewModel>();
+            Children = new ObservableCollection<DirectoryItemViewModel>();
 
             // Show the expand arrow if we are not a file
-            if (this.Type != DirectoryItemType.File)
-                this.Children.Add(null);
+            if (Type != DirectoryItemType.File)
+                Children.Add(null);
         }
 
         #endregion
@@ -115,12 +112,12 @@ namespace WpfTreeView
         private void Expand()
         {
             // We cannot expand a file
-            if (this.Type == DirectoryItemType.File)
+            if (Type == DirectoryItemType.File)
                 return;
 
             // Find all children
-            var children = DirectoryStructure.GetDirectoryContents(this.FullPath);
-            this.Children = new ObservableCollection<DirectoryItemViewModel>(
+            var children = DirectoryStructure.GetDirectoryContents(FullPath);
+            Children = new ObservableCollection<DirectoryItemViewModel>(
                                 children.Select(content => new DirectoryItemViewModel(content.FullPath, content.Type)));
         }
     }

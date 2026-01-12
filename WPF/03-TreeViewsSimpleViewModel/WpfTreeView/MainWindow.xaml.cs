@@ -19,7 +19,7 @@ namespace WpfTreeView
         {
             InitializeComponent();
 
-            this.DataContext = new DirectoryStructureViewModel();
+            DataContext = new DirectoryStructureViewModel();
         }
 
         #endregion
